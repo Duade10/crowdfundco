@@ -24,6 +24,15 @@ class CrowdfundingCampaign(models.Model):
         return self.title
 
 
+class Contribution(models.Model):
+    contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contributions", blank=True, null=True)
+    amount = models.FloatField()
+    campaign = models.OneToOneField(CrowdfundingCampaign, on_delete=models.CASCADE, related_name="contributions")
+
+    def __str__(self):
+        return self.contributor.get_full_name()
+
+
 class CampaignUpdate(models.Model):
     campaign = models.ForeignKey(CrowdfundingCampaign, on_delete=models.CASCADE)
     update_text = models.TextField()
