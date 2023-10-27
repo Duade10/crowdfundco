@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "users.apps.UsersConfig",
+    "crowdfundings.apps.CrowdfundingsConfig",
+    "categories.apps.CategoriesConfig",
 ]
 
 MIDDLEWARE = [
