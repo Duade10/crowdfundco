@@ -5,6 +5,7 @@ from .serializers import UserRegistrationSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserRegistrationView(APIView):
@@ -40,3 +41,35 @@ class UserLogoutView(APIView):
     def post(self, request, format=None):
         request.auth.delete()
         return Response({"message": "User logged out"}, status=status.HTTP_200_OK)
+
+
+class UserUpdateView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, format=None):
+        serializer = UserRegistrationSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserDetailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        serializer = UserRegistrationSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserDeleteView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, format=None):
+        user = request.user
+        user.delete()
+        return Response({"message": "User account deleted"}, status=status.HTTP_204_NO_CONTENT)
