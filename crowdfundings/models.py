@@ -18,7 +18,6 @@ class CrowdfundingCampaign(models.Model):
     end_date = models.DateTimeField()
     organizer = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
-    categories = models.ManyToManyField(Category)
     organizer_profile = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="crowdfundings_campaingns", blank=True, null=True
     )
@@ -30,6 +29,7 @@ class CrowdfundingCampaign(models.Model):
 
 class Contribution(models.Model):
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contributions", blank=True, null=True)
+    no_of_token = models.IntegerField(blank=True, null=True)
     amount = models.FloatField()
     campaign = models.OneToOneField(CrowdfundingCampaign, on_delete=models.CASCADE, related_name="contributions")
 
