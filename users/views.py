@@ -25,9 +25,12 @@ class UserLoginView(APIView):
     def post(self, request, format=None):
         email = request.data.get("email")
         username = email.split("@")[0]
+        print(username)
         password = request.data.get("password")
+        print(password)
 
         user = authenticate(request, username=username, password=password)
+        print(user)
 
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
