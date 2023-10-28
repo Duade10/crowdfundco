@@ -14,7 +14,7 @@ from rest_framework import permissions
 
 class CreateRealEstateListing(CreateAPIView):
     queryset = RealEstateListing.objects.all()
-    serializer_class = RealEstateListingSerializer
+    serializer_class = RealEstateListingCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
@@ -68,6 +68,12 @@ class AddTokenDetail(CreateAPIView):
 
 
 class DeleteTokenDetail(DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = TokenDetail.objects.all()
+    serializer_class = TokenDetailSerializer
+
+
+class DetailTokenDetail(RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TokenDetail.objects.all()
     serializer_class = TokenDetailSerializer

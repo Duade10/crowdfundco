@@ -7,7 +7,7 @@ from .models import RealEstateListing, ExtraDocument, Image, TokenDetail
 class TokenDetailSerializer(ModelSerializer):
     class Meta:
         model = TokenDetail
-        fields = "__all__"
+        fields = ["id", "listing", "inital_token_price", "is_token_fractional", "fractions"]
 
 
 class ExtraDocumentSerializer(ModelSerializer):
@@ -54,6 +54,7 @@ class RealEstateListingCreateSerializer(ModelSerializer):
 class RealEstateListingSerializer(ModelSerializer):
     real_estate_agent = UserSerializer(read_only=True)
     extra_documents = SerializerMethodField()
+    token_detail = SerializerMethodField()
 
     class Meta:
         model = RealEstateListing
@@ -72,9 +73,18 @@ class RealEstateListingSerializer(ModelSerializer):
             "photo",
             "real_estate_agent",
             "extra_documents",
+            "token_detail",
         )
 
     def get_extra_documents(self, obj):
         extra_documents = obj.extra_documents.all()
         serializer = ExtraDocumentSerializer(extra_documents, many=True)
         return serializer.data
+
+    def get_token_detail(self, obj):
+        try:
+            token_detail = obj.token_detail
+            serializer = TokenDetailSerializer(token_detail)
+            return serializer.data
+        except TokenDetail.DoesNotExist:
+            return None
