@@ -1,14 +1,20 @@
 from rest_framework import generics, permissions
 from .models import CrowdfundingCampaign, Contribution
-from .serializers import CrowdfundingCampaignSerializer
+from .serializers import CrowdfundingCampaignSerializer, CrowdfundingCampainCreateSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Sum
 
 
-class CampaignListCreateView(generics.ListCreateAPIView):
+class CampaignListView(generics.ListAPIView):
     queryset = CrowdfundingCampaign.objects.all()
     serializer_class = CrowdfundingCampaignSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class CampaignCreateView(generics.CreateAPIView):
+    queryset = CrowdfundingCampaign.objects.all()
+    serializer_class = CrowdfundingCampainCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 

@@ -11,20 +11,19 @@ class CrowdfundingCampaign(models.Model):
         ("canceled", "Canceled"),
     ]
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField()
-    funding_target = models.DecimalField(max_digits=10, decimal_places=2)
+    funding_target = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    organizer = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
-    organizer_profile = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="crowdfundings_campaingns", blank=True, null=True
+    organizer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="crowdfunding_campaign", blank=True, null=True
     )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
     realestatelisting = models.OneToOneField(RealEstateListing, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return "Random"
 
 
 class Contribution(models.Model):
