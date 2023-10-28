@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 from .models import CrowdfundingCampaign, Contribution
-from .serializers import CrowdfundingCampaignSerializer, CrowdfundingCampainCreateSerializer
+from .serializers import CrowdfundingCampaignDetailSerializer, CrowdfundingCampaignCreateSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Sum
@@ -8,19 +8,19 @@ from django.db.models import Sum
 
 class CampaignListView(generics.ListAPIView):
     queryset = CrowdfundingCampaign.objects.all()
-    serializer_class = CrowdfundingCampaignSerializer
+    serializer_class = CrowdfundingCampaignDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
 class CampaignCreateView(generics.CreateAPIView):
     queryset = CrowdfundingCampaign.objects.all()
-    serializer_class = CrowdfundingCampainCreateSerializer
+    serializer_class = CrowdfundingCampaignCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
 class CampaignDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CrowdfundingCampaign.objects.all()
-    serializer_class = CrowdfundingCampaignSerializer
+    serializer_class = CrowdfundingCampaignDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
@@ -39,7 +39,7 @@ class CampaignProgressView(APIView):
         )
         progress_percentage = (total_contributions / campaign.funding_target) * 100
 
-        serializer = CrowdfundingCampaignSerializer(campaign)
+        serializer = CrowdfundingCampaignDetailSerializer(campaign)
 
         response_data = {
             "campaign_details": serializer.data,

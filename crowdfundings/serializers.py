@@ -6,9 +6,13 @@ from users.serializers import UserSerializer
 
 
 class CrowdfundingCampaignDetailSerializer(serializers.ModelSerializer):
+    organizer = UserSerializer(read_only=True)
+    realestatelisting = RealEstateListingSerializer(read_only=True)
+
     class Meta:
         model = CrowdfundingCampaign
         fields = [
+            "id",
             "title",
             "description",
             "funding_target",
@@ -20,7 +24,7 @@ class CrowdfundingCampaignDetailSerializer(serializers.ModelSerializer):
         ]
 
 
-class CrowdfundingCampainCreateSerializer(serializers.ModelSerializer):
+class CrowdfundingCampaignCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CrowdfundingCampaign
         fields = "__all__"
