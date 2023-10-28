@@ -1,13 +1,32 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from users.serializers import UserSerializer
 
-from .models import RealEstateListing
+from .models import RealEstateListing, ExtraDocument, Image, TokenDetail
+
+
+class TokenDetailSerializer(ModelSerializer):
+    class Meta:
+        model = TokenDetail
+        fields = "__all__"
+
+
+class ExtraDocumentSerializer(ModelSerializer):
+    class Meta:
+        model = ExtraDocument
+        fields = ["id", "document_type", "description", "listing", "file"]
+
+
+class ExtraDocumentCreateSerializer(ModelSerializer):
+    class Meta:
+        model = ExtraDocument
+        fields = ["document_type", "description", "listing", "file"]
 
 
 class RealEstateListingCreateSerializer(ModelSerializer):
     class Meta:
         model = RealEstateListing
         fields = (
+            "id",
             "title",
             "description",
             "price",
@@ -16,7 +35,6 @@ class RealEstateListingCreateSerializer(ModelSerializer):
             "features",
             "status",
             "real_estate_agent",
-            "slug",
             "latitude",
             "longitude",
             "size",
@@ -34,7 +52,8 @@ class RealEstateListingCreateSerializer(ModelSerializer):
 
 
 class RealEstateListingSerializer(ModelSerializer):
-    real_estate_agent = UserSerializer()
+    real_estate_agent = UserSerializer(read_only=True)
+    extra_documents = SerializerMethodField()
 
     class Meta:
         model = RealEstateListing
@@ -47,10 +66,15 @@ class RealEstateListingSerializer(ModelSerializer):
             "property_type",
             "features",
             "status",
-            "slug",
             "latitude",
             "longitude",
             "size",
             "photo",
             "real_estate_agent",
+            "extra_documents",
         )
+
+    def get_extra_documents(self, obj):
+        extra_documents = obj.extra_documents.all()
+        serializer = ExtraDocumentSerializer(extra_documents, many=True)
+        return serializer.data

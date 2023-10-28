@@ -1,6 +1,20 @@
 from django.contrib import admin
 
-from .models import RealEstateListing
+from .models import RealEstateListing, ExtraDocument
 
 
-admin.site.register(RealEstateListing)
+class ExtraDocumentTabularInline(admin.TabularInline):
+    model = ExtraDocument
+
+
+@admin.register(RealEstateListing)
+class RealEstateListingAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "price",
+        "location",
+        "status",
+    ]
+    inlines = [
+        ExtraDocumentTabularInline,
+    ]
