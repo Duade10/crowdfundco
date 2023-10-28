@@ -4,12 +4,20 @@ from .serializers import CrowdfundingCampaignDetailSerializer, CrowdfundingCampa
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Sum
+from .paginations import CampaignPagination
+
+
+class UserCampaignListView(generics.ListAPIView):
+    serializer_class = CrowdfundingCampaignDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CampaignPagination
 
 
 class CampaignListView(generics.ListAPIView):
     queryset = CrowdfundingCampaign.objects.all()
     serializer_class = CrowdfundingCampaignDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CampaignPagination
 
 
 class CampaignCreateView(generics.CreateAPIView):
@@ -18,7 +26,7 @@ class CampaignCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class CampaignDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CampaignDetailView(generics.RetrieveAPIView):
     queryset = CrowdfundingCampaign.objects.all()
     serializer_class = CrowdfundingCampaignDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
