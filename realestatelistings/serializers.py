@@ -6,4 +6,18 @@ from .models import RealEstateListing
 class RealEstateListingSerializer(ModelSerializer):
     class Meta:
         model = RealEstateListing
-        fields = "__all__"
+        fields = (
+            "title",
+            "description",
+            "price",
+            "location",
+            "property_type",
+            "features",
+            "status",
+            "real_estate_agent",
+            "slug",
+            "latitude",
+            "longitude",
+            "size",
+            "photo",
+        )

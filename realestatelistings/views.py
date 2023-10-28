@@ -2,10 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import RealEstateListing
 from .serializers import RealEstateListingSerializer
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, CreateAPIView
 
 
-class CreateRealEstateListing(APIView):
+class CreateRealEstateListing(CreateAPIView):
     def post(self, request):
         serializer = RealEstateListingSerializer(data=request.data)
 

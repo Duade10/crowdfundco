@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import CrowdfundingCampaign, CampaignUpdate, Contribution
 
-# Register your models here.
+admin.site.register(CrowdfundingCampaign)
+admin.site.register(CampaignUpdate)
+admin.site.register(Contribution)

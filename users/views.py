@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserRegistrationSerializer
+from .serializers import UserRegistrationSerializer, UserUpdateSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.authentication import TokenAuthentication
@@ -15,7 +15,7 @@ class UserRegistrationView(APIView):
             user = serializer.save()
             user.login_method = "email"
             user.is_active = False
-            user.verify_email(request)
+            # user.verify_email(request)
             token, created = Token.objects.get_or_create(user=user)
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -23,7 +23,8 @@ class UserRegistrationView(APIView):
 
 class UserLoginView(APIView):
     def post(self, request, format=None):
-        username = request.data.get("username")
+        email = request.data.get("email")
+        username = email.split("@")[0]
         password = request.data.get("password")
 
         user = authenticate(request, username=username, password=password)
@@ -48,7 +49,7 @@ class UserUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, format=None):
-        serializer = UserRegistrationSerializer(request.user, data=request.data, partial=True)
+        serializer = UserUpdateSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

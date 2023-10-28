@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from categories.models import Category
+from realestatelistings.models import RealEstateListing
 
 
 class CrowdfundingCampaign(models.Model):
@@ -18,7 +19,10 @@ class CrowdfundingCampaign(models.Model):
     organizer = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
     categories = models.ManyToManyField(Category)
-    organizer_profile = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    organizer_profile = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="crowdfundings_campaingns", blank=True, null=True
+    )
+    realestatelisting = models.OneToOneField(RealEstateListing, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -34,7 +38,9 @@ class Contribution(models.Model):
 
 
 class CampaignUpdate(models.Model):
-    campaign = models.ForeignKey(CrowdfundingCampaign, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(
+        CrowdfundingCampaign, related_name="updates", on_delete=models.CASCADE, blank=True, null=True
+    )
     update_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
