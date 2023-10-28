@@ -12,6 +12,12 @@ class UserCampaignListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = CampaignPagination
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            queryset = CrowdfundingCampaign.objects.filter(organizer=user)
+            return queryset
+
 
 class CampaignListView(generics.ListAPIView):
     queryset = CrowdfundingCampaign.objects.all()
